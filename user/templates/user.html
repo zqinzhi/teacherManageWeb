@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>干部培训学院教师信息可视化统计系统</title>
+    <script src="/static/dist/js/echarts.min.js"></script>
+    <script src="/static/dist/js/jquery.min.js"></script>
+    <script src="/static/dist/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/dist/css/user.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/static/dist/css/layui.css" media="all">
+</head>
+<body>
+<div class="loginUi">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend>后台登录</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" action="/login/loginView/" method="post">
+        {% csrf_token %}
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">{{ unit_2_name }}</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+            <div class="layui-input-inline">
+                <input type="password" lay-verify="required" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">{{ unit_2_pwd }}</div>
+        </div>
+        <div class="forget">
+            <a href="{{ unit_l }}">{{ unit_1_name }}</a>
+        </div>
+        <div style="margin-bottom: 20px">{{ tips }}</div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit="" lay-filter="demo2">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

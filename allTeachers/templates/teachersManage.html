@@ -1,0 +1,323 @@
+<html>
+<body onload="getAllInfo()">
+<!-- 顶部开始 -->
+{% include 'ManageHeader.html' %}
+<!-- 顶部结束 -->
+{% csrf_token %}
+<!-- 中间内容开始 -->
+<div class="dataShow">
+    <div class="layui-btn-group">
+        <div style="font-size: 26px; float: left; margin-right: 10px;">教师信息列表</div>
+        <button type="button" class="layui-btn" onclick="quanxuan()">全选</button>
+        <button type="button" class="layui-btn" onclick="quxiao()">取消</button>
+        <button type="button" class="layui-btn" onclick="deleteInfo()">删除</button>
+        <button type="button" class="layui-btn" onclick="window.location.href = '/add'">添加</button>
+    </div>
+    <div class="layui-btn-group" style="float: right">
+        <form action="/add/inputFile/" method="post" enctype="multipart/form-data" style="float: left">
+            {% csrf_token %}
+            <input type="file" name="inputFile" accept="application/vnd.ms-excel" class="layui-btn layui-btn-warm"/>
+            <button class="layui-btn layui-btn-warm" type="submit">导入</button>
+        </form>
+        <button type="button" class="layui-btn layui-btn-warm">字段编辑</button>
+    </div>
+    <div class="listShow">
+        <table class="layui-table" lay-filter="test" id="tb">
+            <thead>
+            <tr>
+                <th style="width:60px"><input type="checkbox" id="all" onchange="dianji()"/>
+                    &nbsp;&nbsp;ID
+                </th>
+                <th>姓名</th>
+                <th style="width:30px">
+                    <select id="demo1" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">性别</option>
+                    </select>
+                </th>
+                <th style="width:250px">单位职务</th>
+                <th style="width:50px">
+                    <select id="demo2" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">职级</option>
+                    </select>
+                </th>
+                <th style="width:50px">
+                    <select id="demo3" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">职称</option>
+                    </select>
+                </th>
+                <th style="width:50px">
+                    <select id="demo4" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">学历</option>
+                    </select>
+                </th>
+                <th>年龄</th>
+                <th style="width:50px">
+                    <select id="demo5" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">省内外</option>
+                    </select>
+                </th>
+                <th style="width:50px">
+                    <select id="demo6" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">校内外</option>
+                    </select>
+                </th>
+                <th style="width:50px">
+                    <select id="demo7" name="demo1" lay-verify="required" class="select"
+                            onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                        <option value="0">行业</option>
+                    </select>
+                </th>
+                <th>设置</th>
+            </tr>
+            {% for teachers in page %}
+                <tr style="height:50px">
+                    <th>
+                        <input type="checkbox" name="ck" value="{{ teachers.id }}" οnclick="userCheck(this)"/>&nbsp;&nbsp;{{ teachers.id }}
+                    </th>
+                    <th>{{ teachers.t_Name }}</th>
+                    <th>{{ teachers.t_sex }}</th>
+                    <th>{{ teachers.t_work }}</th>
+                    <th>{{ teachers.t_title }}</th>
+                    <th>{{ teachers.t_level }}</th>
+                    <th>{{ teachers.t_education }}</th>
+                    <th>{{ teachers.t_age }}</th>
+                    <th>{{ teachers.t_province }}</th>
+                    <th>{{ teachers.t_school }}</th>
+                    <th>{{ teachers.t_from }}</th>
+                    <th style="width:90px">
+                        <div class="layui-btn-group">
+                            <button type="button" class="layui-btn layui-btn-sm">
+                                <i class="layui-icon" onclick="openDialog(this)" id="{{ teachers.id }}">&#xe642;</i>
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-sm">
+                                <i class="layui-icon" onclick="deleteOne(this)" id="{{ teachers.id }}">&#xe640;</i>
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+            {% endfor %}
+            </thead>
+        </table>
+    </div>
+</div>
+<div class="paginator">
+    <ul id="nav">
+        {% if page.has_previous %}
+            <li><a href="/teachersManage/{{ page.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span></a></li>
+        {% endif %}
+        {% for num in page.paginator.page_range %}
+            {% if pindex == page.number %}
+                <li><a href="">{{ num }}</a></li>
+            {% else %}
+                <li><a href="/teachersManage/{{ num }}">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+            <li><a href="/teachersManage/{{ page.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span></a></li>
+        {% endif %}
+    </ul>
+</div>
+<!-- 中间内容结束 -->
+
+<!-- 底部开始 -->
+<div class="footer2">
+    版权所有©峤智编程
+</div>
+<!-- 底部结束 -->
+<!-- 点击修改按钮后弹出零时窗口开始 -->
+
+<!-- 点击修改按钮后弹出零时窗口结束 -->
+<!-- 下拉菜单的script操作 -->
+<script type="text/javascript">
+    var allSex = [];
+    var allEducation = [];
+    var allFrom = [];
+    var allLevel = [];
+    var allProvince = [];
+    var allSchool = [];
+    var allTitle = [];
+//这是给下拉菜单添加选项，数据来自后台读取的数据库数据
+    function getAllInfo() {
+        allSex = {{ allSex|safe }};
+        allEducation = {{ allEducation|safe }};
+        allFrom = {{ allFrom|safe }};
+        allLevel = {{ allLevel|safe }};
+        allProvince = {{ allProvince|safe }};
+        allSchool = {{ allSchool|safe }};
+        allTitle = {{ allTitle|safe }};
+        $.each(allSex, function (index, item) {
+            console.log(index, item);
+            $('#demo1').append(new Option(item['title'], item['id']));
+        });
+        $.each(allTitle, function (index, item) {
+            console.log(index, item);
+            $('#demo2').append(new Option(item['title'], item['id']));
+        });
+        $.each(allLevel, function (index, item) {
+            console.log(index, item);
+            $('#demo3').append(new Option(item['title'], item['id']));
+        });
+        $.each(allEducation, function (index, item) {
+            console.log(index, item);
+            $('#demo4').append(new Option(item['title'], item['id']));
+        });
+        $.each(allProvince, function (index, item) {
+            console.log(index, item);
+            $('#demo5').append(new Option(item['title'], item['id']));
+        });
+        $.each(allSchool, function (index, item) {
+            console.log(index, item);
+            $('#demo6').append(new Option(item['title'], item['id']));
+        });
+        $.each(allFrom, function (index, item) {
+            console.log(index, item);
+            $('#demo7').append(new Option(item['title'], item['id']));
+        });
+    }
+
+    function selectChange(value, content) {
+        var info = [];
+        info.push(value);
+        info.push(content);
+        var f = document.createElement('form');
+        f.style.display = 'none';
+        f.action = '/add/screen/';
+        f.method = 'post';
+        // 一定要在后面加上csrf_token，要不然会出错
+        f.innerHTML = '<input type="hidden" name="screenInfo" value="' + info + '"/>{% csrf_token %}';
+        document.body.appendChild(f);
+        f.submit();
+    }
+
+    //全选
+    function dianji() {
+        var flag = document.getElementById("all").checked;
+        var cks = document.getElementsByName("ck");
+        if (flag) {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < cks.length; i++) {
+                cks[i].checked = false;
+            }
+        }
+    }
+
+    //使用全选按钮
+    function quanxuan() {
+        var cks = document.getElementsByName("ck");
+        var flag = document.getElementById("all");
+        flag.checked = true;
+        for (var i = 0; i < cks.length; i++) {
+            cks[i].checked = true;
+        }
+    }
+
+    //使用取消全选按钮
+    function quxiao() {
+        var cks = document.getElementsByName("ck");
+        var flag = document.getElementById("all");
+        flag.checked = false;
+        for (var i = 0; i < cks.length; i++) {
+            cks[i].checked = false;
+        }
+    }
+
+    //批量删除
+    function deleteInfo() {
+        if (confirm('确定要删除吗') == true) {
+            var valArr = [];
+            var ones = document.getElementsByName('ck');
+            for (var i = 0; i < ones.length; i++) {
+                if (ones[i].checked == true) {
+                    valArr[i] = ones[i].value
+                }
+            }
+            if (valArr.length != 0) {
+                // var vals = valArr.join(',');
+                //ajax方法向后台传递数据
+                // TMD我就是做不对ajax
+                // window.location.href = "/add/delete?value=" + valArr;
+                // 只能使用添加表单的形式来做，扯淡啊
+                var f = document.createElement('form');
+                f.style.display = 'none';
+                f.action = '/add/delete/';
+                f.method = 'post';
+                // 一定要在后面加上csrf_token，要不然会出错
+                f.innerHTML = '<input type="hidden" name="choiceID" value="' + valArr + '"/>{% csrf_token %}';
+                document.body.appendChild(f);
+                f.submit();
+            } else {
+                var error_m = "请选择数据";
+                alert(error_m);
+            }
+        } else {
+            return false
+        }
+    }
+
+    //打开弹出窗口，修改教师信息
+    function openDialog(element) {
+        layer.open({
+            title: '教师信息修改',
+            type: 2,
+            //content: '/add/updateT/', //这里content是一个普通的String
+            content: '/add/updateT?ID=' + element.id,
+            area: ['1200px', '600px'],
+            offset: '50px',
+            anim: 0,
+            btnAlign: 'c',
+            btn: ['保存', '关闭'],
+            yes: function (index, layero) {
+                var r = confirm("确认修改吗？");
+                if (r == true) {
+                    //下面这句很重要啊，是从弹出窗口中的formData()函数获取修改的所有信息
+                    var res = window["layui-layer-iframe" + index].formData();
+                    //打印返回的值，看是否有我们想返回的值。res是从弹出的悬浮窗口修改信息返回的值
+                    console.log(res);
+                    var f = document.createElement('form');
+                    f.style.display = 'none';
+                    f.action = '/add/updateOne/';
+                    f.method = 'post';
+                    // 一定要在后面加上csrf_token，要不然会出错
+                    f.innerHTML = '<input type="hidden" name="choiceID" value="' + res + '"/>{% csrf_token %}';
+                    document.body.appendChild(f);
+                    f.submit();
+                } else {
+                    console.log('取消修改')
+                }
+            },
+            btn2: function (index, layero) {
+                layer.close(index);
+            }
+        });
+    }
+
+    //删除某位教师信息
+    function deleteOne(oneID) {
+        var r = confirm("确认删除吗？");
+        if (r == true) {
+            var f = document.createElement('form');
+            f.style.display = 'none';
+            f.action = '/add/deleteOne/';
+            f.method = 'post';
+            // 一定要在后面加上csrf_token，要不然会出错
+            f.innerHTML = '<input type="hidden" name="deleteID" value="' + oneID.id + '"/>{% csrf_token %}';
+            document.body.appendChild(f);
+            f.submit();
+        } else {
+            console.log('取消删除')
+        }
+    }
+</script>
+</body>
+</html>

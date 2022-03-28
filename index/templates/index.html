@@ -1,0 +1,135 @@
+<html>
+<body>
+<!-- 顶部开始 -->
+{% include 'header.html' %}
+<!-- 顶部结束 -->
+
+<!-- 顶部结束 -->
+
+<!-- 数据概览开始 -->
+<div class="dataShow">
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe62d;</i>
+            <div class="text">262</div>
+        </div>
+        <div class="explain">培训班班次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe613;</i>
+            <div class="text">43000</div>
+        </div>
+        <div class="explain">培训班人次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe770;</i>
+            <div class="text">212</div>
+        </div>
+        <div class="explain">授课教师</div>
+    </div>
+    <div class="oneData"></div>
+</div>
+<!-- 数据概览结束 -->
+<!-- 柱状图和饼图开始 -->
+<div class="mainContent" style="height:800px; padding-top: 5px; background-color: #87CEEB; margin-top: 150px;"
+     id="mainShow"></div>
+<script type="text/javascript">
+    var chartDom = document.getElementById('mainShow');
+    var myChart = echarts.init(chartDom);
+    var option;
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
+        },
+        series: [
+            {
+                name: '行业',
+                type: 'pie',
+                selectedMode: 'single',
+                radius: [0, '30%'],
+                label: {
+                    position: 'inner',
+                    fontSize: 14,
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [
+                    {value: {{ tFromZfjg }}, name: '政府机关'},
+                    {value: {{ tFromGx }}, name: '高校'},
+                    {value: {{ tFromDx }}, name: '党校', selected: true},
+                    {value: {{ tFromQy }}, name: '企业'},
+                    {value: {{ tFromQt }}, name: '其他'}
+                ]
+            },
+            {
+                name: '职称/职务',
+                type: 'pie',
+                radius: ['45%', '60%'],
+                labelLine: {
+                    length: 30,
+                },
+                label: {
+                    formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+                    backgroundColor: '#F6F8FC',
+                    borderColor: '#8C8D8E',
+                    borderWidth: 1,
+                    borderRadius: 4,
+
+                    rich: {
+                        a: {
+                            color: '#6E7079',
+                            lineHeight: 22,
+                            align: 'center'
+                        },
+                        hr: {
+                            borderColor: '#8C8D8E',
+                            width: '100%',
+                            borderWidth: 1,
+                            height: 0
+                        },
+                        b: {
+                            color: '#4C5058',
+                            fontSize: 14,
+                            fontWeight: 'bold',
+                            lineHeight: 33
+                        },
+                        per: {
+                            color: '#fff',
+                            backgroundColor: '#4C5058',
+                            padding: [3, 4],
+                            borderRadius: 4
+                        }
+                    }
+                },
+                data: [
+                    {value: {{ tLevelJs }}, name: '教授'},
+                    {value: {{ tLevelFjs }}, name: '副教授'},
+                    {value: {{ tLevelZjjs }}, name: '讲师'},
+                    {value: {{ tLevelZj }}, name: '助教'},
+                    {value: {{ tLevelYjy }}, name: '研究员'},
+                    {value: {{ tLevelFjs }}, name: '副研究员'},
+                    {value: {{ tLevelZlyjy }}, name: '助理研究员'},
+                    {value: {{ tLevelYjsxy }}, name: '研究实习员'},
+                    {value: {{ tTitleTj }}, name: '厅级'},
+                    {value: {{ tTitleCj }}, name: '处级'},
+                    {value: {{ tTitleKj }}, name: '科级'}
+                ]
+            }
+        ]
+    };
+
+    option && myChart.setOption(option);
+</script>
+<!-- 折线图和饼结束始 -->
+<div style="height: 20px;"></div>
+<!-- 底部开始 -->
+<div class="footer2">
+    版权所有©峤智编程
+</div>
+<!-- 底部开始 -->
+</body>
+</html>

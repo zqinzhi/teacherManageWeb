@@ -1,0 +1,371 @@
+<html>
+<body>
+<!-- 顶部开始 -->
+{% include 'header.html' %}
+<!-- 顶部结束 -->
+
+<!-- 顶部结束 -->
+
+<!-- 数据概览开始 -->
+<div class="dataShow">
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe62d;</i>
+            <div class="text">262</div>
+        </div>
+        <div class="explain">培训班班次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe613;</i>
+            <div class="text">43000</div>
+        </div>
+        <div class="explain">培训班人次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe770;</i>
+            <div class="text">212</div>
+        </div>
+        <div class="explain">授课教师</div>
+    </div>
+    <div class="oneData"></div>
+</div>
+<!-- 数据概览结束 -->
+<!-- 柱状图和饼图开始 -->
+<div class="mainContent">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main2" class="histogram"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var chartDom = document.getElementById('main2');
+        var myChart = echarts.init(chartDom);
+        var option;
+        // 指定图表的配置项和数据
+        option = {
+            title: {
+                text: '计划内外情况占比',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 10,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {value: '{{ jhnbcNum }}', name: '计划内班次', itemStyle: {color: '#73c0de'}},
+                        {value: '{{ jhwbcNum }}', name: '计划外班次', itemStyle: {color: '#ee6666'}},
+                    ]
+                }
+            ]
+        };
+        option && myChart.setOption(option);
+    </script>
+    <div id="main" class="pieChart"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '各类培训班次数量情况',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ["学院内主体班次", "送教下乡班次", "国内委托班次", "国外委托班次"]
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                name: '职务/职称',
+                type: 'bar',
+                data: ['{{ ztbcNum }}', '{{ sjxxNum }}', '{{ gnwtbcNum }}', '{{ gwwtbcNum }}'],
+                itemStyle: {
+                    normal: {
+                        color: '#fac858',
+                        label: {
+                            show: true, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'black',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</div>
+
+<!-- 柱状图和饼图结束 -->
+
+
+<!-- 折线图和饼图开始 -->
+<div class="mainContent">
+    <div id="main3" class="histogram"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main3'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '历年培训人数',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: ['2014年', '2015年', '2016年', '2017年', '2018年', '2019年', '2020年', '2021年', '总人数']
+            },
+            series: [
+                {
+                    name: '人数：',
+                    type: 'bar',
+                    data: {{ oneYearNum }},
+                },
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main4" class="pieChart"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main4'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '历年培训班数量',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['2014年', '2015年', '2016年', '2017年', '2018年', '2019年', '2020年', '2021年']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: {{ yearNumList }},
+                type: 'line',
+                areaStyle: {},
+                itemStyle: {
+                    normal: {
+                        color: '#9a60b4',
+                        label: {
+                            show: true, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'black',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</div>
+<!-- 折线图和饼结束始 -->
+
+<!-- 折线图和饼图开始 -->
+<div class="mainContent">
+    <div id="main5" class="histogram"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main5'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '各类培训班人数',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: ["国外委托班次", "国内委托班次", "送教下乡班次", "学院内主体班次", "总人数"]
+            },
+            series: [
+                {
+                    name: '人数：',
+                    type: 'bar',
+                    data: ['{{ gwwtbcPeople }}', '{{ gnwtbcPeople }}', '{{ sjxxPeople }}', '{{ ztbcPeople }}', '{{ allPeople }}']
+                },
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div class="pieChart">
+        <div style="width: 100%; height: 50px;">
+            <select onchange="selectChange(this.value)">
+                <option value="2021年">2021年</option>
+                <option value="2020年">2020年</option>
+                <option value="2019年">2019年</option>
+                <option value="2018年">2018年</option>
+                <option value="2017年">2017年</option>
+                <option value="2016年">2016年</option>
+                <option value="2015年">2015年</option>
+                <option value="2014年">2014年</option>
+            </select>
+        </div>
+        <div id="main6" style="width: 100%; height: 400px;"></div>
+    </div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main6'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '2021年度各月份培训班人数情况',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: {{ monthNum }},
+                type: 'line',
+                itemStyle: {
+                    normal: {
+                        color: '#9a60b4',
+                        label: {
+                            show: true, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'black',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        //下拉菜单切换数据
+        function selectChange(year) {
+            $.ajax({
+                url: "oneYearInfo/",
+                type: "POST",
+                data: {year: year, csrfmiddlewaretoken: '{{ csrf_token }}'},  //必须加csf，要不然view的时候会出错
+                success: function (data) {
+                    console.log(data);
+                    myChart.hideLoading();    //隐藏加载动画
+                    var info = JSON.parse(data);
+                    myChart.setOption({        //加载数据图表
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            data: info['peopleNum']
+                        }],
+                        title:{
+                            text: info['optionText']
+                        }
+                    });
+                },
+                error: function (jqXHR, textStatus, err) {
+                    console.log(arguments);
+                },
+
+                complete: function (jqXHR, textStatus) {
+                    console.log(textStatus);
+                },
+                statusCode: {
+                    '403': function (jqXHR, textStatus, err) {
+                        console.log(arguments);
+                    },
+                    '400': function (jqXHR, textStatus, err) {
+                        console.log(arguments);
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+<!-- 折线图和饼结束始 -->
+<!-- 增加的一个空行 -->
+<div style="height: 550px;"></div>
+
+<!-- 底部开始 -->
+<div class="footer">
+    版权所有©峤智编程
+</div>
+<!-- 底部开始 -->
+</body>
+</html>

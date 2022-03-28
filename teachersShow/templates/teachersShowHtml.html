@@ -1,0 +1,355 @@
+<html>
+<body>
+<!-- 顶部开始 -->
+{% include 'header.html' %}
+<!-- 顶部结束 -->
+
+<!-- 顶部结束 -->
+
+<!-- 数据概览开始 -->
+<div class="dataShow">
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe62d;</i>
+            <div class="text">262</div>
+        </div>
+        <div class="explain">培训班班次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe613;</i>
+            <div class="text">43000</div>
+        </div>
+        <div class="explain">培训班人次</div>
+    </div>
+    <div class="oneData">
+        <div class="threeInfo">
+            <i class="layui-icon" style="font-size: 45px; color:#009688; margin-top:24px;">&#xe770;</i>
+            <div class="text">212</div>
+        </div>
+        <div class="explain">授课教师</div>
+    </div>
+    <div class="oneData"></div>
+</div>
+<!-- 数据概览结束 -->
+
+<!-- 柱状图和饼图开始 -->
+<div class="mainContent">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" class="histogram"></div>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '职称比例',
+                left: 'left'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '半径模式',
+                    type: 'pie',
+                    radius: [50, 150],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 8
+                    },
+                    data: [
+                        {value: {{ tLevelJs }}, name: '教授'},
+                        {value: {{ tLevelFjs }}, name: '副教授'},
+                        {value: {{ tLevelZjjs }}, name: '讲师'},
+                        {value: {{ tLevelZj }}, name: '助教'},
+                        {value: {{ tLevelYjy }}, name: '研究员'},
+                        {value: {{ tLevelFyjy }}, name: '副研究员'},
+                        {value: {{ tLevelZlyjy }}, name: '助理研究员'},
+                        {value: {{ tLevelYjsxy }}, name: '研究实习员'},
+                        {value: {{ tLevelQt }}, name: '其他'}
+                    ],
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '20',
+                            fontWeight: 'bold',
+                            formatter: '{b}({d}%)'      // 显示百分比
+                        }
+                    },
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+    <div id="main2" class="pieChart"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main2'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '教师男女比例',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+            },
+            series: [
+                {
+                    name: '性别',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {value: {{ tSexM }}, name: '男', itemStyle: {color: '#fac858'}},
+                        {value: {{ tSexF }}, name: '女', itemStyle: {color: '#73c0de'}}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(1, 1, 1, 0.5)',
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</div>
+
+<!-- 柱状图和饼图结束 -->
+
+
+<!-- 折线图和饼图开始 -->
+<div class="mainContent">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main3" class="histogram"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var chartDom = document.getElementById('main3');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '教师行业来源组成',
+                subtext: 'From Where',
+                sublink: 'http://e.weibo.com/1341556070/AjQH99che'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: function (params) {
+                    var tar = params[1];
+                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                splitLine: {show: false},
+                data: ['总人数', '政府机关', '党校', '高校', '企业', '其他']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '辅助',
+                    type: 'bar',
+                    stack: '总量',
+                    itemStyle: {
+                        barBorderColor: 'rgba(0,0,0,0)',
+                        color: 'rgba(0,0,0,0)'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            barBorderColor: 'rgba(0,0,0,0)',
+                            color: 'rgba(0,0,0,0)'
+                        }
+                    },
+                    data: {{ tFrom }}
+                },
+                {
+                    name: '人数：',
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        show: true,
+                        position: 'inside'
+                    },
+                    data: {{ tFrom }}
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+    <div id="main4" class="pieChart"></div>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main4');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '教师职级情况',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['省部级', '正厅', '副厅', '正处', '副处', '正科', '副科', '科员', '其他']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: {{ tTitle }},
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: '#ea7ccc',
+                        label: {
+                            show: true, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'black',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }
+            }]
+        };
+
+        option && myChart.setOption(option);
+    </script>
+</div>
+<!-- 折线图和饼图开始 -->
+<div class="mainContent">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main5" class="histogram"></div>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main5');
+        var myChart = echarts.init(chartDom);
+        var option;
+        option = {
+            title: {
+                text: '省内外教师情况',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: 'bottom',
+                left: 'center'
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        {value: '{{ tProvince_sn }}', name: '省内教师', itemStyle: {color: '#48D1CC'}},
+                        {value: '{{ tProvince_sw }}', name: '省外教师', itemStyle: {color: '#FFD700'}},
+                    ]
+                }
+            ]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+    <div id="main6" class="pieChart"></div>
+    <script type="text/javascript">
+        var chartDom = document.getElementById('main6');
+        var myChart = echarts.init(chartDom);
+        var option;
+
+        option = {
+            title: {
+                text: '教师学历情况',
+                left: 'center'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['博士', '硕士', '本科', '专科', '大专', '其他']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: {{ tEducation }},
+                type: 'line',
+                itemStyle: {
+                    normal: {
+                        color: '#9a60b4',
+                        label: {
+                            show: true, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'black',
+                                fontSize: 16
+                            }
+                        }
+                    }
+                }
+            }]
+        };
+
+        option && myChart.setOption(option);
+
+    </script>
+</div>
+<!-- 折线图和饼结束始 -->
+
+<!-- 增加的一个空行 -->
+<div style="height: 550px;"></div>
+
+<!-- 底部开始 -->
+<div class="footer">
+    版权所有©峤智编程
+</div>
+<!-- 底部开始 -->
+</body>
+</html>

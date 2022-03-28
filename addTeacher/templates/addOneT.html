@@ -1,0 +1,160 @@
+<html>
+<body>
+<!-- 顶部开始 -->
+{% include 'header.html' %}
+<!-- 顶部结束 -->
+
+<!-- 中间内容开始 -->
+<div style="width: 50%; margin: 15px auto 0 auto;" class="addDataShow">
+    <form class="layui-form" action="/add/addOne/" method="post">
+        {% csrf_token %}
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入姓名" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <select name="sex" lay-verify="required">
+                    <option value=""></option>
+                    {% for sex in t_sex %}
+                        <option value="{{ sex.t_sex }}">{{ sex.t_sex }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单位职务</label>
+            <div class="layui-input-block">
+                <input type="text" name="work" required lay-verify="required" placeholder="请输入单位及职务" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职级</label>
+            <div class="layui-input-block">
+                <select name="level" lay-verify="required">
+                    <option value=""></option>
+                    {% for level in t_level %}
+                        <option value="{{ level.t_level }}">{{ level.t_level }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职称</label>
+            <div class="layui-input-block">
+                <select name="title" lay-verify="required">
+                    <option value=""></option>
+                    {% for title in t_title %}
+                        <option value="{{ title.t_title }}">{{ title.t_title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学历</label>
+            <div class="layui-input-block">
+                <select name="education" lay-verify="required">
+                    <option value=""></option>
+                    {% for education in t_education %}
+                        <option value="{{ education.t_education }}">{{ education.t_education }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号</label>
+            <div class="layui-input-block">
+                <input type="text" name="ID_card" required lay-verify="required" placeholder="请输入身份证号码"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄</label>
+            <div class="layui-input-block">
+                <input type="text" name="age" required lay-verify="required" placeholder="" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">省内外</label>
+            <div class="layui-input-block">
+                <select name="province" lay-verify="required">
+                    <option value=""></option>
+                    {% for province in t_province %}
+                        <option value="{{ province.t_province }}">{{ province.t_province }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">校内外</label>
+            <div class="layui-input-block">
+                <select name="school" lay-verify="required">
+                    <option value=""></option>
+                    {% for school in t_school %}
+                        <option value="{{ school.t_school }}">{{ school.t_school }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">行业</label>
+            <div class="layui-input-block">
+                <select name="from" lay-verify="required">
+                    <option value=""></option>
+                    {% for form in t_from %}
+                        <option value="{{ form.t_from }}">{{ form.t_from }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">教师简介</label>
+            <div class="layui-input-block">
+                <textarea name="introduction" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input class="layui-btn" type="submit" value="立即提交">
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- 中间内容结束 -->
+
+<!-- 底部开始 -->
+<div class="footer2">
+    版权所有©峤智编程
+</div>
+<!-- 底部结束 -->
+
+<!-- 下拉菜单的script操作 -->
+<script>
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+{% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+{% endif %}
+</body>
+< /html>

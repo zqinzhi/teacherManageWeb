@@ -1,0 +1,196 @@
+<html>
+<body>
+<!-- 顶部开始 -->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>干部培训学院教师信息统计分析系统</title>
+    <script src="/static/dist/js/echarts.min.js"></script>
+    <script src="/static/dist/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/dist/css/index.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="/static/dist/css/layui.css" media="all">
+</head>
+<!-- 顶部结束 -->
+<!-- 中间内容开始 -->
+<div style="width: 80%; margin: 15px auto 0 auto; background-color: #e6e6e6;" class="addDataShow;">
+    <form class="layui-form" action="/add/updateOne/" method="post" id="allFormInfo">
+        {% csrf_token %}
+        <div id="leftV" style="float: left; width: 50%; height: auto;">
+            <div class="layui-form-item" style="float: left">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id="name" required lay-verify="required"
+                           value="{{ updateInfo.t_Name }}"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <select name="sex" id="sex" lay-verify="required">
+                        <option value="{{ updateInfo.t_sex }}" selected>{{ updateInfo.t_sex }}</option>
+                        {% for sex in t_sex %}
+                            <option value="{{ sex.t_sex }}">{{ sex.t_sex }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">单位职务</label>
+                <div class="layui-input-block">
+                    <input type="text" name="work" id="work" required lay-verify="required"
+                           value="{{ updateInfo.t_work }}"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">职级</label>
+                <div class="layui-input-block">
+                    <select name="level" id="level" lay-verify="required">
+                        <option value="{{ updateInfo.t_title }}" selected>{{ updateInfo.t_title }}</option>
+                        {% for title in t_title %}
+                            <option value="{{ title.t_title }}">{{ title.t_title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">职称</label>
+                <div class="layui-input-block">
+                    <select name="title" id="title" lay-verify="required">
+                        <option value="{{ updateInfo.t_level }}" selected>{{ updateInfo.t_level }}</option>
+                        {% for level in t_level %}
+                            <option value="{{ level.t_level }}">{{ level.t_level }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学历</label>
+                <div class="layui-input-block">
+                    <select name="education" id="education" lay-verify="required">
+                        {% for education in t_education %}
+                            <option value="{{ education.t_education }}">{{ education.t_education }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="rightV" style="float: right; width: 50%; height: auto;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="ID_card" id="ID_card" required lay-verify="required"
+                           value="{{ updateInfo.t_ID_card }}"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="text" name="age" id="age" required lay-verify="required" value="{{ updateInfo.t_age }}"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">省内外</label>
+                <div class="layui-input-block">
+                    <select name="province" id="province" lay-verify="required">
+                        <option value="{{ updateInfo.t_province }}" selected>{{ updateInfo.t_province }}</option>
+                        {% for province in t_province %}
+                            <option value="{{ province.t_province }}">{{ province.t_province }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">校内外</label>
+                <div class="layui-input-block">
+                    <select name="school" id="school" lay-verify="required">
+                        <option value="{{ updateInfo.t_school }}" selected>{{ updateInfo.t_school }}</option>
+                        {% for school in t_school %}
+                            <option value="{{ school.t_school }}">{{ school.t_school }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">行业</label>
+                <div class="layui-input-block">
+                    <select name="from" id="from" lay-verify="required">
+                        <option value="{{ updateInfo.t_from }}" selected>{{ updateInfo.t_from }}</option>
+                        {% for from in t_from %}
+                            <option value="{{ from.t_from }}">{{ from.t_from }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">教师简介</label>
+                <div class="layui-input-block">
+                    <textarea name="introduction" id="textValue" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <script language="javascript">
+                        document.getElementById("textValue").value = "{{ updateInfo.t_introduction }}";
+                    </script>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 中间内容结束 -->
+
+<!-- 下拉菜单的script操作 -->
+<script>
+    //因为这个窗口是利用layer弹出的，为了能保存后退出返回到原界面。。。。想尽办法
+    var formData = function () {
+        var elements = new Array();
+        var info1 = document.getElementById("name").value;
+        var info2 = document.getElementById("sex").value;
+        var info3 = document.getElementById("work").value;
+        var info4 = document.getElementById("level").value;
+        var info5 = document.getElementById("title").value;
+        var info6 = document.getElementById("education").value;
+        var info7 = document.getElementById("ID_card").value;
+        var info8 = document.getElementById("age").value;
+        var info9 = document.getElementById("province").value;
+        var info10 = document.getElementById("school").value;
+        var info11 = document.getElementById("from").value;
+        var info12 = document.getElementById("textValue").value;
+        elements.push(info1);
+        elements.push(info2);
+        elements.push(info3);
+        elements.push(info4);
+        elements.push(info5);
+        elements.push(info6);
+        elements.push(info7);
+        elements.push(info8);
+        elements.push(info9);
+        elements.push(info10);
+        elements.push(info11);
+        elements.push(info12);
+        return elements;
+    };
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+{% if messages %}
+    <script>
+        {% for msg in messages %}
+            alert('{{ msg.message }}');
+        {% endfor %}
+    </script>
+{% endif %}
+</body>
+</html>

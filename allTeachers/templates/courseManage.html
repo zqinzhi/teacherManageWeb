@@ -1,0 +1,144 @@
+<html>
+<body onload="getAllInfo()">
+<!-- 顶部开始 -->
+{% include 'manageHeader.html' %}
+<!-- 顶部结束 -->
+{% csrf_token %}
+<!-- 中间内容开始 -->
+<div class="dataShow">
+    <div class="layui-btn-group">
+        <div style="font-size: 26px; float: left; margin-right: 10px;">2021年</div>
+        <button type="button" class="layui-btn" onclick="quanxuan()">全选</button>
+        <button type="button" class="layui-btn" onclick="quxiao()">取消</button>
+        <button type="button" class="layui-btn" onclick="deleteInfo()">删除</button>
+        <button type="button" class="layui-btn" onclick="window.location.href = '/add'">添加</button>
+    </div>
+</div>
+<div class="listShow">
+    <table class="layui-table" lay-filter="test" id="tb">
+        <thead>
+        <tr>
+            <th style="width:60px">期数</th>
+            <th style="width:250px">班次名称</th>
+            <th style="width:30px">日期</th>
+            <th style="width:30px">学制</th>
+            <th style="width:30px">人数</th>
+            <th style="width:50px">
+                <select id="demo1" name="demo1" lay-verify="required" class="select"
+                        onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                    <option value="0">类型1</option>
+                </select>
+            </th>
+            <th style="width:50px">
+                <select id="demo2" name="demo1" lay-verify="required" class="select"
+                        onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                    <option value="0">类型2</option>
+                </select>
+            </th>
+            <th style="width:50px">
+                <select id="demo3" name="demo1" lay-verify="required" class="select"
+                        onchange="selectChange(this.value,this.options[this.selectedIndex].text)">
+                    <option value="0">年份</option>
+                </select>
+            </th>
+            <th>设置</th>
+        <tbody>
+        {% for course in page %}
+            <tr style="height:50px">
+                <th>第{{ course.id }}期</th>
+                <th>{{ course.c_name }}</th>
+                <th>{{ course.c_month }}</th>
+                <th>{{ course.c_cycle }}</th>
+                <th>{{ course.c_people }}</th>
+                <th>{{ course.c_outORin }}</th>
+                <th>{{ course.c_category }}</th>
+                <th>{{ course.c_year }}</th>
+                <th style="width:90px">
+                    <div class="layui-btn-group">
+                        <button type="button" class="layui-btn layui-btn-sm">
+                            <i class="layui-icon" onclick="openDialog(this)" id="{{ course.id }}">&#xe642;</i>
+                        </button>
+                        <button type="button" class="layui-btn layui-btn-sm">
+                            <i class="layui-icon" onclick="deleteOne(this)" id="{{ course.id }}">&#xe640;</i>
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </thead>
+    </table>
+</div>
+<!-- 中间内容结束 -->
+
+<!-- 底部开始 -->
+<div class="footer2">
+    版权所有©峤智编程
+</div>
+<!-- 底部结束 -->
+<!-- 点击修改按钮后弹出零时窗口开始 -->
+
+<!-- 点击修改按钮后弹出零时窗口结束 -->
+<!-- 下拉菜单的script操作 -->
+<script type="text/javascript">
+    var allCategory = [];
+    var allCategory2 = [];
+    var allYears = [];
+
+    //这是给下拉菜单添加选项，数据来自后台读取的数据库数据
+    function getAllInfo() {
+        allCategory = {{ allCategory|safe }};
+        $.each(allCategory, function (index, item) {
+            console.log(index, item);
+            $('#demo1').append(new Option(item['title'], item['id']));
+        });
+
+        allCategory2 = {{ allCategory2|safe }};
+        $.each(allCategory2, function (index, item) {
+            console.log(index, item);
+            $('#demo2').append(new Option(item['title'], item['id']));
+        });
+
+        allYears = {{ allYears|safe }};
+        $.each(allYears, function (index, item) {
+            console.log(index, item);
+            $('#demo3').append(new Option(item['title'], item['id']));
+        });
+    }
+
+    function selectChange(value, content) {
+        var info = [];
+        info.push(value);
+        info.push(content);
+        $.ajax({
+            url: "/courses/showInfo/",
+            type: "POST",
+            dataType: "json",
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_todken }}',
+                screenInfo: info,
+            },
+            success: function (data) {
+                var pageInfo = data['pageInfo'];
+                var tbody = $('<tbody></tbody>');
+                $(pageInfo).each(function (index) {
+                    var val = pageInfo[index];
+                    var tr = $('<tr></tr>');
+                    tr.append('<th style="width:60px">第' + val.id + '期</th>' + '<th style="width:750px">' + val.c_name + '</th>' + '<th>' + val.c_month + '</th>' + '<th>' + val.c_cycle + '</th>' + '<th>' + val.c_people + '</th>' + '<th>' + val.c_outORin + '</th>' + '<th>' + val.c_category + '</th>' + '<th>' + val.c_year + '</th>');
+                    tr.append('<th><div class="layui-btn-group">\n' +
+                        '                        <button type="button" class="layui-btn layui-btn-sm">\n' +
+                        '                            <i class="layui-icon" onclick="openDialog(this)" id="{{ course.id }}">&#xe642;</i>\n' +
+                        '                        </button>\n' +
+                        '                        <button type="button" class="layui-btn layui-btn-sm">\n' +
+                        '                            <i class="layui-icon" onclick="deleteOne(this)" id="{{ course.id }}">&#xe640;</i>\n' +
+                        '                        </button>\n' +
+                        '                    </div></th>');
+                    tbody.append(tr);
+                });
+                $('#tb tbody').replaceWith(tbody)
+            }
+        })
+    }
+</script>
+</body>
+</html>
