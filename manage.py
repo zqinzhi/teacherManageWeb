@@ -22,4 +22,5 @@ if __name__ == '__main__':
     main()
 
     def ok():
+        jj = 1
         quit()
